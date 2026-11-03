@@ -51,14 +51,11 @@ Gradle is the only build tool (see ADR 0006).
 ./gradlew test                                               # all tests
 ./gradlew test --tests com.gildedrose.GildedRoseTest         # one class
 ./gradlew test --tests 'com.gildedrose.GildedRoseTest.foo'   # one method
-./gradlew -q texttest                                        # run TexttestFixture for 30 days
-./gradlew -q texttest --args 10                              # custom day count
+./gradlew -q text                                            # run TexttestFixture for 30 days
+./gradlew -q text --args 10                                  # custom day count
 ```
 
-Known inconsistency: `README.md` and `texttest_rig.py` call a Gradle task named `text`, but `build.gradle` defines
-`texttest`.
-
-Starting state, before Step 0: Gradle wrapper 8.11, `sourceCompatibility = '1.8'`, JUnit 5.6.2. The installed JDK is 25.
+Toolchain: Gradle 9.8.2 (wrapper), Java 25 (Gradle toolchain), JUnit 6.1.3 (via BOM). See ADR 0007.
 
 
 ## Architecture
@@ -81,7 +78,7 @@ It records the legacy behaviour, so a behaviour-preserving refactor must reprodu
 requirement is added. To check without installing TextTest:
 
 ```bash
-./gradlew -q texttest | diff - ../texttests/ThirtyDays/stdout.gr
+./gradlew -q text | diff - ../texttests/ThirtyDays/stdout.gr
 ```
 
 To use TextTest itself, uncomment the Java executable lines in `../texttests/config.gr`. See `README.md`.

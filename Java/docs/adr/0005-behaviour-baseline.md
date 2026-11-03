@@ -25,7 +25,7 @@ Result on 2026-11-03: the output is identical (373 lines).
 After Step 0 the same check runs through Gradle:
 
 ```bash
-./gradlew -q texttest | diff - ../texttests/ThirtyDays/stdout.gr
+./gradlew -q text | diff - ../texttests/ThirtyDays/stdout.gr
 ```
 
 ## Consequences
