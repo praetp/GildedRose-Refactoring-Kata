@@ -4,7 +4,7 @@ Date: 2026-11-09
 
 ## Status
 
-Accepted
+Accepted. The handling of invalid input is amended by [0011](0011-invalid-input-outside-contract.md).
 
 ## Context
 

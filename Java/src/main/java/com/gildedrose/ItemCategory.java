@@ -74,19 +74,13 @@ enum ItemCategory {
         return item.sellIn < 0;
     }
 
-    /**
-     * Raises quality by {@code amount}, but not above {@link #MAX_QUALITY}. A quality that is already above the
-     * maximum (invalid input) is left as it is, as in the original code.
-     */
+    /** Raises quality by {@code amount}, but not above {@link #MAX_QUALITY}. */
     private static void increaseQuality(Item item, int amount) {
-        item.quality = Math.max(item.quality, Math.min(MAX_QUALITY, item.quality + amount));
+        item.quality = Math.min(MAX_QUALITY, item.quality + amount);
     }
 
-    /**
-     * Lowers quality by {@code amount}, but not below {@link #MIN_QUALITY}. A quality that is already below the
-     * minimum (invalid input) is left as it is, as in the original code.
-     */
+    /** Lowers quality by {@code amount}, but not below {@link #MIN_QUALITY}. */
     private static void decreaseQuality(Item item, int amount) {
-        item.quality = Math.min(item.quality, Math.max(MIN_QUALITY, item.quality - amount));
+        item.quality = Math.max(MIN_QUALITY, item.quality - amount);
     }
 }
