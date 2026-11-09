@@ -1,6 +1,14 @@
 package com.gildedrose;
 
+/**
+ * Prints the inventory day by day, for the TextTest approval test in {@code ../texttests}.
+ */
 public class TexttestFixture {
+    /**
+     * Runs the fixture.
+     *
+     * @param args optional number of days to simulate; the output then covers day 0 up to and including that day
+     */
     public static void main(String[] args) {
         System.out.println("OMGHAI!");
 

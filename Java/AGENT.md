@@ -28,6 +28,9 @@ All documents we produce (Markdown, ADRs, etc.) must not exceed 120 columns per 
 ### Step 0
 Make sure the current code base is migrated to the latest version of Gradle and port it to Java 25.
 
+Note on order: the characterization tests (ADR 0008) were brought forward from Step 2 and written before Step 1,
+so the code changes that Step 1's tooling may force are protected by tests.
+
 ### Step 1
 Prepare code development. Put tools like checkstyle, errorprone, jacoco etc in place so we raise the quality of the
 produced code.
@@ -47,7 +50,10 @@ Make a webapp ? TBD
 Gradle is the only build tool (see ADR 0006).
 
 ```bash
-./gradlew build                                              # compile + test
+./gradlew build                                              # compile + test + all quality checks (ADR 0009)
+./gradlew checkstyleMain checkstyleTest                      # style only
+./gradlew jacocoTestReport                                   # coverage report: build/reports/jacoco/test/html
+./gradlew pitest                                             # mutation testing: build/reports/pitest
 ./gradlew test                                               # all tests
 ./gradlew test --tests com.gildedrose.GildedRoseTest         # one class
 ./gradlew test --tests 'com.gildedrose.GildedRoseTest.foo'   # one method
@@ -56,6 +62,10 @@ Gradle is the only build tool (see ADR 0006).
 ```
 
 Toolchain: Gradle 9.8.2 (wrapper), Java 25 (Gradle toolchain), JUnit 6.1.3 (via BOM). See ADR 0007.
+
+Every warning fails the build: javac `-Xlint:all -Werror`, Error Prone, Checkstyle (Google style, 4 spaces,
+120 columns, `config/checkstyle/`), JaCoCo 100% line + branch, PIT 100% mutation score. `Item.java` is exempt from
+Checkstyle only, because it may not be changed. See ADR 0009.
 
 
 ## Architecture

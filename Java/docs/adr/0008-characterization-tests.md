@@ -19,6 +19,8 @@ the code does, and pin these readings too.
 
 ## Decision
 
+- Write the tests now, before Step 1, although `AGENT.md` lists them under Step 2. Step 1 treats warnings as
+  errors, which may force changes to the legacy code; the tests make those changes safe.
 - Replace the kata's disabled placeholder (ADR 0004) with characterization tests in `GildedRoseTest`.
 - The tests pin down the current behaviour of the legacy code, including how it resolves ambiguities in the spec.
   Such cases are marked in their display name.
