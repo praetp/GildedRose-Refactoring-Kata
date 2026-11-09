@@ -37,11 +37,16 @@ produced code.
 All warnings must be treated as errors unless we have a good reason to ignore it.
 
 ### Step 2
+Refactor the existing code before adding the new feature, without changing its behaviour.
+The characterization tests, the golden master (TextTest) and all quality checks must stay green after every commit.
+The design is the user's decision and is recorded in an ADR.
+
+### Step 3
 Implement the functional business requirements as stated in @GildedRoseRequirements.md.
 Review the code with the builtin /code-review skill and address concerns.
 Prompt the user if you doubt.
 
-### Step 3
+### Step 4
 Make a webapp ? TBD
 
 
