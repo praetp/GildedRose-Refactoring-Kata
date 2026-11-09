@@ -17,7 +17,12 @@ It does not address all of the potential concerns of agentic coding but it will 
 When I started on this Kata, it was my goal to first bring the tooling (Gradle, Java) up to a new, modern level so we
 can immediately benefit from the newer tooling. Next, I made sure all tests were in place before I started
 refactoring the code base to make it more readable and maintainable.
+There, we made the common sense trade-offs (e.g. use of enums) and decisions (e.g. enforcing contracts).
 
 Eventually, I added the required missing piece of functionality which was easy to do given the preparations.
 
 To finish, I asked Claude to do a code review to fix some minor leftovers.
+
+No other implementations of this Kata on the Internet were consulted for this task.
+
+If required, we can further elaborate on this exercise by making a full-blown cloud-hosted webapp of this toy project.
