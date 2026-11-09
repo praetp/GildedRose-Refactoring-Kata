@@ -40,7 +40,7 @@ class GildedRoseTest {
     @DisplayName("Normal item")
     class NormalItem {
 
-        @ParameterizedTest(name = "sellIn {0}, quality {1} -> sellIn {2}, quality {3}")
+        @ParameterizedTest(name = "sellIn {0}, quality {1} -> expected sellIn {2}, expected quality {3}")
         @DisplayName("loses 1 quality per day before the sell-by date")
         @CsvSource({
             "10, 20, 9, 19",
@@ -51,7 +51,7 @@ class GildedRoseTest {
             assertUpdate(NORMAL, sellIn, quality, expectedSellIn, expectedQuality);
         }
 
-        @ParameterizedTest(name = "sellIn {0}, quality {1} -> sellIn {2}, quality {3}")
+        @ParameterizedTest(name = "sellIn {0}, quality {1} -> expected sellIn {2}, expected quality {3}")
         @DisplayName("loses 2 quality per day once the sell-by date has passed")
         @CsvSource({
             "  0, 20,  -1, 18",
@@ -62,7 +62,7 @@ class GildedRoseTest {
             assertUpdate(NORMAL, sellIn, quality, expectedSellIn, expectedQuality);
         }
 
-        @ParameterizedTest(name = "sellIn {0}, quality {1} -> sellIn {2}, quality {3}")
+        @ParameterizedTest(name = "sellIn {0}, quality {1} -> expected sellIn {2}, expected quality {3}")
         @DisplayName("never drops below 0 quality")
         @CsvSource({
             " 5, 0,  4, 0",
@@ -79,7 +79,7 @@ class GildedRoseTest {
     @DisplayName("Aged Brie")
     class AgedBrie {
 
-        @ParameterizedTest(name = "sellIn {0}, quality {1} -> sellIn {2}, quality {3}")
+        @ParameterizedTest(name = "sellIn {0}, quality {1} -> expected sellIn {2}, expected quality {3}")
         @DisplayName("gains 1 quality per day before the sell-by date")
         @CsvSource({
             "2, 0, 1, 1",
@@ -89,7 +89,7 @@ class GildedRoseTest {
             assertUpdate(AGED_BRIE, sellIn, quality, expectedSellIn, expectedQuality);
         }
 
-        @ParameterizedTest(name = "sellIn {0}, quality {1} -> sellIn {2}, quality {3}")
+        @ParameterizedTest(name = "sellIn {0}, quality {1} -> expected sellIn {2}, expected quality {3}")
         @DisplayName("gains 2 quality per day once the sell-by date has passed (intended rule, see ADR 0008)")
         @CsvSource({
             " 0, 10, -1, 12",
@@ -99,7 +99,7 @@ class GildedRoseTest {
             assertUpdate(AGED_BRIE, sellIn, quality, expectedSellIn, expectedQuality);
         }
 
-        @ParameterizedTest(name = "sellIn {0}, quality {1} -> sellIn {2}, quality {3}")
+        @ParameterizedTest(name = "sellIn {0}, quality {1} -> expected sellIn {2}, expected quality {3}")
         @DisplayName("never exceeds 50 quality")
         @CsvSource({
             " 5, 50,  4, 50",
@@ -131,7 +131,7 @@ class GildedRoseTest {
     @DisplayName("Backstage passes")
     class BackstagePasses {
 
-        @ParameterizedTest(name = "sellIn {0}, quality {1} -> sellIn {2}, quality {3}")
+        @ParameterizedTest(name = "sellIn {0}, quality {1} -> expected sellIn {2}, expected quality {3}")
         @DisplayName("gain 1 quality when the concert is more than 10 days away")
         @CsvSource({
             "15, 20, 14, 21",
@@ -141,7 +141,7 @@ class GildedRoseTest {
             assertUpdate(BACKSTAGE_PASSES, sellIn, quality, expectedSellIn, expectedQuality);
         }
 
-        @ParameterizedTest(name = "sellIn {0}, quality {1} -> sellIn {2}, quality {3}")
+        @ParameterizedTest(name = "sellIn {0}, quality {1} -> expected sellIn {2}, expected quality {3}")
         @DisplayName("gain 2 quality when the concert is 10 to 6 days away")
         @CsvSource({
             "10, 20, 9, 22",
@@ -151,7 +151,7 @@ class GildedRoseTest {
             assertUpdate(BACKSTAGE_PASSES, sellIn, quality, expectedSellIn, expectedQuality);
         }
 
-        @ParameterizedTest(name = "sellIn {0}, quality {1} -> sellIn {2}, quality {3}")
+        @ParameterizedTest(name = "sellIn {0}, quality {1} -> expected sellIn {2}, expected quality {3}")
         @DisplayName("gain 3 quality when the concert is 5 to 1 days away")
         @CsvSource({
             "5, 20, 4, 23",
@@ -161,7 +161,7 @@ class GildedRoseTest {
             assertUpdate(BACKSTAGE_PASSES, sellIn, quality, expectedSellIn, expectedQuality);
         }
 
-        @ParameterizedTest(name = "sellIn {0}, quality {1} -> sellIn {2}, quality {3}")
+        @ParameterizedTest(name = "sellIn {0}, quality {1} -> expected sellIn {2}, expected quality {3}")
         @DisplayName("drop to 0 quality after the concert")
         @CsvSource({
             " 0, 20, -1, 0",
@@ -172,7 +172,7 @@ class GildedRoseTest {
             assertUpdate(BACKSTAGE_PASSES, sellIn, quality, expectedSellIn, expectedQuality);
         }
 
-        @ParameterizedTest(name = "sellIn {0}, quality {1} -> sellIn {2}, quality {3}")
+        @ParameterizedTest(name = "sellIn {0}, quality {1} -> expected sellIn {2}, expected quality {3}")
         @DisplayName("never exceed 50 quality")
         @CsvSource({
             "15, 50, 14, 50",
@@ -190,7 +190,7 @@ class GildedRoseTest {
     @DisplayName("Conjured item")
     class ConjuredItem {
 
-        @ParameterizedTest(name = "sellIn {0}, quality {1} -> sellIn {2}, quality {3}")
+        @ParameterizedTest(name = "sellIn {0}, quality {1} -> expected sellIn {2}, expected quality {3}")
         @DisplayName("loses 2 quality per day before the sell-by date")
         @CsvSource({
             "3,  6, 2,  4",
@@ -200,7 +200,7 @@ class GildedRoseTest {
             assertUpdate(CONJURED, sellIn, quality, expectedSellIn, expectedQuality);
         }
 
-        @ParameterizedTest(name = "sellIn {0}, quality {1} -> sellIn {2}, quality {3}")
+        @ParameterizedTest(name = "sellIn {0}, quality {1} -> expected sellIn {2}, expected quality {3}")
         @DisplayName("loses 4 quality per day once the sell-by date has passed")
         @CsvSource({
             " 0, 10, -1, 6",
@@ -210,7 +210,7 @@ class GildedRoseTest {
             assertUpdate(CONJURED, sellIn, quality, expectedSellIn, expectedQuality);
         }
 
-        @ParameterizedTest(name = "sellIn {0}, quality {1} -> sellIn {2}, quality {3}")
+        @ParameterizedTest(name = "sellIn {0}, quality {1} -> expected sellIn {2}, expected quality {3}")
         @DisplayName("never drops below 0 quality")
         @CsvSource({
             "5, 1,  4, 0",
