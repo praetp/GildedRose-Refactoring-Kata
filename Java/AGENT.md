@@ -91,7 +91,15 @@ requirement is added. To check without installing TextTest:
 ./gradlew -q text | diff - ../texttests/ThirtyDays/stdout.gr
 ```
 
-To use TextTest itself, uncomment the Java executable lines in `../texttests/config.gr`. See `README.md`.
+TextTest itself (`../texttests/config.gr` points at `Java/texttest_rig.py`, which runs the Gradle `text` task):
+
+```bash
+(cd .. && ./start_texttest.sh)          # creates ../venv and installs TextTest on first use, then runs the suite
+(cd .. && venv/bin/texttest -d . -con)  # same, once TextTest is installed
+```
+
+On a failure TextTest asks `View details(v), Approve(a) or continue(any other key)?`. Never approve while
+refactoring: that overwrites the golden master.
 
 ### Domain rules to watch for
 
