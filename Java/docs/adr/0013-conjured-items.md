@@ -4,7 +4,7 @@ Date: 2026-11-09
 
 ## Status
 
-Accepted
+Accepted. The name matching is refined by [0014](0014-conjured-word-boundary.md).
 
 ## Context
 
@@ -28,6 +28,11 @@ two things open: which items are conjured, and what "twice as fast" means after 
 The golden master (`../texttests/ThirtyDays/stdout.gr`) changes as a result, in exactly 4 lines, all for
 "Conjured Mana Cake" (days 1 to 4: quality 4, 2, 0, 0 instead of 5, 4, 3, 1). The new output is approved
 deliberately; every other line is unchanged.
+
+`../texttests/config.gr` and `../texttests/ThirtyDays/stdout.gr` are shared by all language versions in the kata
+repo. Enabling the Java rig in `config.gr` and approving the new output is what the kata asks for ("uncomment the
+lines for your language"). It does mean TextTest now fails for language versions without Conjured items; that only
+matters if this branch were contributed back to the upstream kata repo, which is not the intent.
 
 ## Consequences
 

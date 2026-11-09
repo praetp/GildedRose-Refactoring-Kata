@@ -72,7 +72,7 @@ enum ItemCategory {
     private static final int MIN_QUALITY = 0;
     private static final int MAX_QUALITY = 50;
     private static final int LEGENDARY_QUALITY = 80;
-    private static final String CONJURED_PREFIX = "Conjured";
+    private static final String CONJURED_WORD = "Conjured";
 
     /** Applies one day of this category's rule to the item. */
     abstract void update(Item item);
@@ -90,8 +90,8 @@ enum ItemCategory {
     }
 
     /**
-     * Returns the category of the item, based on its name. Names starting with "Conjured" (case-sensitive) are
-     * conjured items; any other unknown name is a normal item.
+     * Returns the category of the item, based on its name. Names starting with the word "Conjured"
+     * (case-sensitive) are conjured items; any other unknown name is a normal item.
      *
      * @throws NullPointerException if the item or its name is null
      */
@@ -102,8 +102,13 @@ enum ItemCategory {
             case "Aged Brie" -> AGED_BRIE;
             case "Backstage passes to a TAFKAL80ETC concert" -> BACKSTAGE_PASS;
             case "Sulfuras, Hand of Ragnaros" -> LEGENDARY;
-            default -> item.name.startsWith(CONJURED_PREFIX) ? CONJURED : NORMAL;
+            default -> isConjured(item.name) ? CONJURED : NORMAL;
         };
+    }
+
+    /** Whether the name starts with the whole word "Conjured": "Conjured Mana Cake" does, "Conjuredite" does not. */
+    private static boolean isConjured(String name) {
+        return name.equals(CONJURED_WORD) || name.startsWith(CONJURED_WORD + " ");
     }
 
     private static void ageOneDay(Item item) {

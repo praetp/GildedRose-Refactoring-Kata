@@ -75,13 +75,17 @@ Checkstyle only, because it may not be changed. See ADR 0009.
 
 ## Architecture
 
-- `src/main/java/com/gildedrose/GildedRose.java` holds all the business logic: the nested if/else in
-  `updateQuality()`. This is the code to refactor.
+- `src/main/java/com/gildedrose/GildedRose.java`: `updateQuality()` validates every item, then updates each one
+  through its category (ADR 0010, ADR 0012).
+- `src/main/java/com/gildedrose/ItemCategory.java` holds the business rules: one enum constant per item kind
+  (`NORMAL`, `CONJURED`, `AGED_BRIE`, `BACKSTAGE_PASS`, `LEGENDARY`), each with its own `update` rule.
+  `ItemCategory.of(item)` maps an item's name to its category; `validate(item)` checks the contract.
 - `src/main/java/com/gildedrose/Item.java` must not be changed. That includes its public mutable fields `name`,
   `sellIn` and `quality`, and the `items` field on `GildedRose`. This is a hard constraint of the kata.
   `updateQuality` and `items` may be made static.
-- `src/test/java/com/gildedrose/GildedRoseTest.java` is a placeholder test that fails on purpose
-  (`assertEquals("fixme", …)`).
+- `src/test/java/com/gildedrose/GildedRoseTest.java` tests the daily update rules per item kind, on every rule
+  boundary (ADR 0008, ADR 0013).
+- `src/test/java/com/gildedrose/GildedRoseContractTest.java` tests that invalid items are rejected (ADR 0012).
 - `src/test/java/com/gildedrose/TexttestFixture.java` runs `updateQuality` once a day and prints the item state for
   each day. It drives the approval tests.
 
@@ -113,9 +117,10 @@ diff, and record it in an ADR.
 - After the sell-by date, quality degrades twice as fast.
 - Aged Brie gains quality: +1 per day, +2 after the sell-by date (intended rule, ADR 0008).
 - Backstage passes gain +2 at 10 days or less and +3 at 5 days or less, then drop to 0 after the concert.
-- Conjured items (name starts with "Conjured", case-sensitive) lose 2 per day, 4 after the sell-by date
-  (ADR 0013).
+- Conjured items (name starts with the word "Conjured", case-sensitive) lose 2 per day, 4 after the sell-by date
+  (ADR 0013, ADR 0014).
 - `updateQuality()` enforces its contract (ADR 0012): items and names non-null, quality 0..50, Sulfuras exactly 80.
   It checks all items before changing any; on a violation it throws and no item is updated.
-- Items are matched by exact name string, e.g. `"Backstage passes to a TAFKAL80ETC concert"` and
-  `"Sulfuras, Hand of Ragnaros"`.
+- Aged Brie, Backstage passes and Sulfuras are matched by exact, case-sensitive name:
+  `"Aged Brie"`, `"Backstage passes to a TAFKAL80ETC concert"`, `"Sulfuras, Hand of Ragnaros"`. Conjured items are
+  matched by their first word; any other name is a normal item.

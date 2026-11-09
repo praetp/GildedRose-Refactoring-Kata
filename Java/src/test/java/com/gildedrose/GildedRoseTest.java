@@ -222,7 +222,7 @@ class GildedRoseTest {
         }
 
         @ParameterizedTest(name = "{0} loses {1} quality")
-        @DisplayName("is any item whose name starts with \"Conjured\" (case-sensitive)")
+        @DisplayName("is any item whose name starts with the word \"Conjured\" (case-sensitive)")
         @CsvSource({
             "'Conjured Mana Cake',  2",
             "'Conjured Sword',      2",
@@ -230,6 +230,8 @@ class GildedRoseTest {
             "'conjured Mana Cake',  1",
             "'Mana Cake Conjured',  1",
             "' Conjured Mana Cake', 1",
+            "'Conjuredite Ore',     1",
+            "'ConjuredX',           1",
         })
         void recognisedByNamePrefix(String name, int expectedLoss) {
             Item item = updatedOnce(name, 5, 20);
