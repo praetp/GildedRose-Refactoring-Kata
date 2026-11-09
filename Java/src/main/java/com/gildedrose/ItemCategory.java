@@ -1,0 +1,92 @@
+package com.gildedrose;
+
+/**
+ * The kinds of items the inn sells, each with its own daily update rule. An item's category follows from its name,
+ * so {@link Item} itself stays untouched.
+ */
+enum ItemCategory {
+
+    /** Loses quality every day, twice as fast once the sell-by date has passed. */
+    NORMAL {
+        @Override
+        void update(Item item) {
+            ageOneDay(item);
+            decreaseQuality(item, isPastSellByDate(item) ? 2 : 1);
+        }
+    },
+
+    /** Gains quality as it ages, twice as fast once the sell-by date has passed. */
+    AGED_BRIE {
+        @Override
+        void update(Item item) {
+            ageOneDay(item);
+            increaseQuality(item, isPastSellByDate(item) ? 2 : 1);
+        }
+    },
+
+    /** Gains quality as the concert approaches, and becomes worthless once it has taken place. */
+    BACKSTAGE_PASS {
+        @Override
+        void update(Item item) {
+            int daysUntilConcert = item.sellIn;
+            ageOneDay(item);
+            if (isPastSellByDate(item)) {
+                item.quality = 0;
+            } else if (daysUntilConcert <= 5) {
+                increaseQuality(item, 3);
+            } else if (daysUntilConcert <= 10) {
+                increaseQuality(item, 2);
+            } else {
+                increaseQuality(item, 1);
+            }
+        }
+    },
+
+    /** Never has to be sold and never changes in quality. */
+    LEGENDARY {
+        @Override
+        void update(Item item) {
+            // Legendary items never change.
+        }
+    };
+
+    private static final int MIN_QUALITY = 0;
+    private static final int MAX_QUALITY = 50;
+
+    /** Applies one day of this category's rule to the item. */
+    abstract void update(Item item);
+
+    /** Returns the category of the item, based on its name. */
+    static ItemCategory of(Item item) {
+        return switch (item.name) {
+            case "Aged Brie" -> AGED_BRIE;
+            case "Backstage passes to a TAFKAL80ETC concert" -> BACKSTAGE_PASS;
+            case "Sulfuras, Hand of Ragnaros" -> LEGENDARY;
+            default -> NORMAL;
+        };
+    }
+
+    private static void ageOneDay(Item item) {
+        item.sellIn--;
+    }
+
+    private static boolean isPastSellByDate(Item item) {
+        return item.sellIn < 0;
+    }
+
+    /**
+     * Raises quality by {@code amount}, but not above {@link #MAX_QUALITY}. A quality that is already above the
+     * maximum (invalid input) is left as it is, as in the original code.
+     */
+    private static void increaseQuality(Item item, int amount) {
+        item.quality = Math.max(item.quality, Math.min(MAX_QUALITY, item.quality + amount));
+    }
+
+    /**
+     * Lowers quality by {@code amount}, but not below {@link #MIN_QUALITY}. A quality that is already below the
+     * minimum (invalid input) is left as it is, as in the original code.
+     */
+    private static void decreaseQuality(Item item, int amount) {
+        item.quality = Math.min(item.quality, Math.max(MIN_QUALITY, item.quality - amount));
+    }
+}
