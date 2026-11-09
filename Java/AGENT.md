@@ -88,9 +88,9 @@ Checkstyle only, because it may not be changed. See ADR 0009.
 ### Approval / golden-master tests
 
 `../texttests/ThirtyDays/stdout.gr` holds the approved output of `TexttestFixture` for 30 days (`options.gr` = `30`).
-It records the legacy behaviour, so a behaviour-preserving refactor must reproduce it exactly. The one exception is
-"Conjured" items: the legacy code doesn't implement them, so their output is expected to change once the Conjured
-requirement is added. To check without installing TextTest:
+It first recorded the legacy behaviour; it was approved again once, for the Conjured feature (ADR 0013), which
+changed only the 4 Conjured Mana Cake lines. A behaviour-preserving change must reproduce it exactly. To check
+without installing TextTest:
 
 ```bash
 ./gradlew -q text | diff - ../texttests/ThirtyDays/stdout.gr
@@ -104,15 +104,17 @@ TextTest itself (`../texttests/config.gr` points at `Java/texttest_rig.py`, whic
 ```
 
 On a failure TextTest asks `View details(v), Approve(a) or continue(any other key)?`. Never approve while
-refactoring: that overwrites the golden master.
+refactoring: that overwrites the golden master. Approve only for a deliberate behaviour change, after reviewing the
+diff, and record it in an ADR.
 
 ### Domain rules to watch for
 
 - Quality is capped to the range 0..50. Sulfuras is the exception: it is always 80 and its `sellIn` never changes.
 - After the sell-by date, quality degrades twice as fast.
-- Aged Brie gains quality, and the legacy code makes it gain +2 per day after the sell-by date.
+- Aged Brie gains quality: +1 per day, +2 after the sell-by date (intended rule, ADR 0008).
 - Backstage passes gain +2 at 10 days or less and +3 at 5 days or less, then drop to 0 after the concert.
-- Conjured items degrade twice as fast as normal items. This is the new feature.
+- Conjured items (name starts with "Conjured", case-sensitive) lose 2 per day, 4 after the sell-by date
+  (ADR 0013).
 - `updateQuality()` enforces its contract (ADR 0012): items and names non-null, quality 0..50, Sulfuras exactly 80.
   It checks all items before changing any; on a violation it throws and no item is updated.
 - Items are matched by exact name string, e.g. `"Backstage passes to a TAFKAL80ETC concert"` and

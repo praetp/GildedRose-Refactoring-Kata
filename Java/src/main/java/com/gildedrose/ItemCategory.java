@@ -13,7 +13,16 @@ enum ItemCategory {
         @Override
         void update(Item item) {
             ageOneDay(item);
-            decreaseQuality(item, isPastSellByDate(item) ? 2 : 1);
+            decreaseQuality(item, normalDegradation(item));
+        }
+    },
+
+    /** Loses quality twice as fast as a normal item. */
+    CONJURED {
+        @Override
+        void update(Item item) {
+            ageOneDay(item);
+            decreaseQuality(item, 2 * normalDegradation(item));
         }
     },
 
@@ -63,6 +72,7 @@ enum ItemCategory {
     private static final int MIN_QUALITY = 0;
     private static final int MAX_QUALITY = 50;
     private static final int LEGENDARY_QUALITY = 80;
+    private static final String CONJURED_PREFIX = "Conjured";
 
     /** Applies one day of this category's rule to the item. */
     abstract void update(Item item);
@@ -80,7 +90,8 @@ enum ItemCategory {
     }
 
     /**
-     * Returns the category of the item, based on its name.
+     * Returns the category of the item, based on its name. Names starting with "Conjured" (case-sensitive) are
+     * conjured items; any other unknown name is a normal item.
      *
      * @throws NullPointerException if the item or its name is null
      */
@@ -91,7 +102,7 @@ enum ItemCategory {
             case "Aged Brie" -> AGED_BRIE;
             case "Backstage passes to a TAFKAL80ETC concert" -> BACKSTAGE_PASS;
             case "Sulfuras, Hand of Ragnaros" -> LEGENDARY;
-            default -> NORMAL;
+            default -> item.name.startsWith(CONJURED_PREFIX) ? CONJURED : NORMAL;
         };
     }
 
@@ -101,6 +112,11 @@ enum ItemCategory {
 
     private static boolean isPastSellByDate(Item item) {
         return item.sellIn < 0;
+    }
+
+    /** Daily quality loss of a normal item: 1, or 2 once the sell-by date has passed. */
+    private static int normalDegradation(Item item) {
+        return isPastSellByDate(item) ? 2 : 1;
     }
 
     /** Raises quality by {@code amount}, but not above {@link #MAX_QUALITY}. */

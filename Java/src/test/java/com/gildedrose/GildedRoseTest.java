@@ -10,9 +10,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 /**
- * Characterization tests: they pin down the behaviour of the legacy {@code updateQuality()} so it can be refactored
- * safely. Each case is one day: (sellIn, quality) before the update -> (sellIn, quality) after it.
- * Conjured items are not covered here; the legacy code treats them as normal items, which is about to change.
+ * Tests of the daily update rules. They started as characterization tests that pinned down the legacy
+ * {@code updateQuality()} before it was refactored (ADR 0008); the Conjured tests were added test-first for the new
+ * feature (ADR 0013). Each case is one day: (sellIn, quality) before the update -> (sellIn, quality) after it.
  */
 class GildedRoseTest {
 
@@ -20,6 +20,7 @@ class GildedRoseTest {
     private static final String AGED_BRIE = "Aged Brie";
     private static final String SULFURAS = "Sulfuras, Hand of Ragnaros";
     private static final String BACKSTAGE_PASSES = "Backstage passes to a TAFKAL80ETC concert";
+    private static final String CONJURED = "Conjured Mana Cake";
 
     private static Item updatedOnce(String name, int sellIn, int quality) {
         Item item = new Item(name, sellIn, quality);
@@ -182,6 +183,58 @@ class GildedRoseTest {
         })
         void qualityNeverAboveFifty(int sellIn, int quality, int expectedSellIn, int expectedQuality) {
             assertUpdate(BACKSTAGE_PASSES, sellIn, quality, expectedSellIn, expectedQuality);
+        }
+    }
+
+    @Nested
+    @DisplayName("Conjured item")
+    class ConjuredItem {
+
+        @ParameterizedTest(name = "sellIn {0}, quality {1} -> sellIn {2}, quality {3}")
+        @DisplayName("loses 2 quality per day before the sell-by date")
+        @CsvSource({
+            "3,  6, 2,  4",
+            "1, 10, 0,  8",
+        })
+        void degradesByTwoBeforeSellByDate(int sellIn, int quality, int expectedSellIn, int expectedQuality) {
+            assertUpdate(CONJURED, sellIn, quality, expectedSellIn, expectedQuality);
+        }
+
+        @ParameterizedTest(name = "sellIn {0}, quality {1} -> sellIn {2}, quality {3}")
+        @DisplayName("loses 4 quality per day once the sell-by date has passed")
+        @CsvSource({
+            " 0, 10, -1, 6",
+            "-1, 10, -2, 6",
+        })
+        void degradesByFourAfterSellByDate(int sellIn, int quality, int expectedSellIn, int expectedQuality) {
+            assertUpdate(CONJURED, sellIn, quality, expectedSellIn, expectedQuality);
+        }
+
+        @ParameterizedTest(name = "sellIn {0}, quality {1} -> sellIn {2}, quality {3}")
+        @DisplayName("never drops below 0 quality")
+        @CsvSource({
+            "5, 1,  4, 0",
+            "0, 3, -1, 0",
+            "0, 0, -1, 0",
+        })
+        void qualityNeverNegative(int sellIn, int quality, int expectedSellIn, int expectedQuality) {
+            assertUpdate(CONJURED, sellIn, quality, expectedSellIn, expectedQuality);
+        }
+
+        @ParameterizedTest(name = "{0} loses {1} quality")
+        @DisplayName("is any item whose name starts with \"Conjured\" (case-sensitive)")
+        @CsvSource({
+            "'Conjured Mana Cake',  2",
+            "'Conjured Sword',      2",
+            "'Conjured',            2",
+            "'conjured Mana Cake',  1",
+            "'Mana Cake Conjured',  1",
+            "' Conjured Mana Cake', 1",
+        })
+        void recognisedByNamePrefix(String name, int expectedLoss) {
+            Item item = updatedOnce(name, 5, 20);
+
+            assertEquals(20 - expectedLoss, item.quality);
         }
     }
 
