@@ -4,7 +4,7 @@ Date: 2026-11-03
 
 ## Status
 
-Accepted
+Superseded by [0008](0008-characterization-tests.md)
 
 ## Context
 
