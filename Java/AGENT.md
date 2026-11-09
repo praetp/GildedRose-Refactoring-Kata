@@ -113,5 +113,7 @@ refactoring: that overwrites the golden master.
 - Aged Brie gains quality, and the legacy code makes it gain +2 per day after the sell-by date.
 - Backstage passes gain +2 at 10 days or less and +3 at 5 days or less, then drop to 0 after the concert.
 - Conjured items degrade twice as fast as normal items. This is the new feature.
+- `updateQuality()` enforces its contract (ADR 0012): items and names non-null, quality 0..50, Sulfuras exactly 80.
+  It checks all items before changing any; on a violation it throws and no item is updated.
 - Items are matched by exact name string, e.g. `"Backstage passes to a TAFKAL80ETC concert"` and
   `"Sulfuras, Hand of Ragnaros"`.

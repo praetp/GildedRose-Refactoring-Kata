@@ -4,7 +4,8 @@ Date: 2026-11-09
 
 ## Status
 
-Accepted. Amends [0010](0010-item-category-enum.md).
+Accepted. Amends [0010](0010-item-category-enum.md). The decision not to validate is superseded by
+[0012](0012-enforce-contract.md); the contract itself and the plain clamps remain.
 
 ## Context
 
