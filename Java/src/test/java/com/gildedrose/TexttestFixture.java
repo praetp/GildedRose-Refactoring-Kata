@@ -1,6 +1,14 @@
 package com.gildedrose;
 
+/**
+ * Prints the inventory day by day, for the TextTest approval test in {@code ../texttests}.
+ */
 public class TexttestFixture {
+    /**
+     * Runs the fixture.
+     *
+     * @param args optional number of days to simulate; the output then covers day 0 up to and including that day
+     */
     public static void main(String[] args) {
         System.out.println("OMGHAI!");
 
@@ -13,7 +21,6 @@ public class TexttestFixture {
                 new Item("Backstage passes to a TAFKAL80ETC concert", 15, 20),
                 new Item("Backstage passes to a TAFKAL80ETC concert", 10, 49),
                 new Item("Backstage passes to a TAFKAL80ETC concert", 5, 49),
-                // this conjured item does not work properly yet
                 new Item("Conjured Mana Cake", 3, 6) };
 
         GildedRose app = new GildedRose(items);

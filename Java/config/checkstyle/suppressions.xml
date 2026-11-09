@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+        "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+        "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+<!-- Each suppression must be justified here and in docs/adr/0009-code-quality-tooling.md. -->
+<suppressions>
+    <!-- Item.java belongs to the goblin and must not be changed (kata rule, see GildedRoseRequirements.md). -->
+    <suppress files="[\\/]com[\\/]gildedrose[\\/]Item\.java$"
+              checks="MissingJavadocType|MissingJavadocMethod|Indentation"/>
+</suppressions>
